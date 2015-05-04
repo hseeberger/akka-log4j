@@ -1,4 +1,7 @@
+import bintray.{ Keys => BintrayKeys }
+import bintray.Plugin.bintrayPublishSettings
 import com.typesafe.sbt.GitPlugin
+import com.typesafe.sbt.SbtPgp
 import com.typesafe.sbt.SbtScalariform
 import com.typesafe.sbt.SbtScalariform.ScalariformKeys
 import de.heikoseeberger.sbtheader.HeaderPlugin
@@ -9,7 +12,7 @@ import scalariform.formatter.preferences.{ AlignSingleLineCaseStatements, Double
 
 object Build extends AutoPlugin {
 
-  override def requires = plugins.JvmPlugin && HeaderPlugin && GitPlugin
+  override def requires = plugins.JvmPlugin && HeaderPlugin && GitPlugin && SbtPgp
 
   override def trigger = allRequirements
 
@@ -18,6 +21,19 @@ object Build extends AutoPlugin {
     List(
       organization := "de.heikoseeberger",
       licenses += ("Apache-2.0", url("http://www.apache.org/licenses/LICENSE-2.0")),
+      homepage := Some(url("https://github.com/hseeberger/akka-log4j")),
+      pomIncludeRepository := (_ => false),
+      pomExtra := <scm>
+        <url>https://github.com/hseeberger/akka-log4j</url>
+        <connection>scm:git:git@github.com:hseeberger/akka-log4j.git</connection>
+      </scm>
+        <developers>
+          <developer>
+            <id>hseeberger</id>
+            <name>Heiko Seeberger</name>
+            <url>http://heikoseeberger.de</url>
+          </developer>
+        </developers>,
       scalaVersion := Version.scala,
       crossScalaVersions := List(scalaVersion.value),
       scalacOptions ++= List(
@@ -45,5 +61,7 @@ object Build extends AutoPlugin {
     // Header settings
     List(
       HeaderPlugin.autoImport.headers := Map("scala" -> Apache2_0("2015", "Heiko Seeberger"))
-    )
+    ) ++
+    // Bintray settings
+    bintrayPublishSettings
 }
