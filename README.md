@@ -1,6 +1,35 @@
 # akka-log4j #
 
-Welcome to akka-log4j!
+akka-log4j is a logging backend implementation for [Akka](http://akka.io) based on [Log4j 2](http://logging.apache.org/log4j/2.x).
+It is an alternative to the official akka-slf4j backend which uses SLF4J.
+
+## Installation
+
+akka-log4j depends on akka-actor 2.3.x.
+
+Grab it while it's hot:
+
+``` scala
+// All releases including intermediate ones are published here,
+// final ones are also published to Maven Central.
+resolvers += "hseeberger at bintray" at "http://dl.bintray.com/hseeberger/maven"
+
+libraryDependencies ++= List(
+  "de.heikoseeberger" %% "akka-log4j" % "0.1.0",
+  ...
+)
+```
+
+## Usage
+
+Configure `akka.loggers` with `de.heikoseeberger.akkalog4j.Log4jLogger`:
+
+```
+akka {
+  loggers  = ["de.heikoseeberger.akkalog4j.Log4jLogger"]
+  ...
+}
+```
 
 ## Contribution policy ##
 
