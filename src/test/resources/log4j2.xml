@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Configuration>
+    <Appenders>
+        <Console name="STDOUT">
+            <PatternLayout>
+                <pattern>%date{ISO8601} level=[%level] logger=[%logger] akkaSource=[%X{akkaSource}]
+                    sourceThread=[%X{sourceThread}] mdc=[ticket-#%X{ticketNumber}: %X{ticketDesc}] - msg=[%msg]%n----%n
+                </pattern>
+            </PatternLayout>
+        </Console>
+        <File name="FILE" fileName="${sys:java.io.tmpdir}/log4j-logger-spec.log" append="false">
+            <PatternLayout>
+                <pattern>%date{ISO8601} level=[%level] logger=[%logger] akkaSource=[%X{akkaSource}]
+                    sourceThread=[%X{sourceThread}] mdc=[ticket-#%X{ticketNumber}: %X{ticketDesc}] - msg=[%msg]%n----%n
+                </pattern>
+            </PatternLayout>
+        </File>
+    </Appenders>
+
+    <Loggers>
+        <Logger name="de.heikoseeberger.akkalog4j" level="info" additivity="false">
+            <AppenderRef ref="FILE"/>
+        </Logger>
+        <Root level="info">
+            <AppenderRef ref="STDOUT"/>
+        </Root>
+    </Loggers>
+</Configuration>
