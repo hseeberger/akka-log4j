@@ -31,6 +31,7 @@ object Log4jLoggerSpec {
   final val Config = """|akka {
                         |  loglevel               = info
                         |  loggers                = ["de.heikoseeberger.akkalog4j.Log4jLogger"]
+                        |  logging-filter         = "de.heikoseeberger.akkalog4j.Log4jLoggingFilter"
                         |  logger-startup-timeout = 30s
                         |}
                         |""".stripMargin

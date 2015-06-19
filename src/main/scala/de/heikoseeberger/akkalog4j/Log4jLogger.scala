@@ -22,50 +22,20 @@ import akka.event.Logging._
 import akka.util.Helpers
 import org.apache.logging.log4j.{ LogManager, ThreadContext }
 
-private object Log4jLogger {
-  final val MdcThread = "sourceThread"
-  final val MdcAkkaSource = "akkaSource"
-  final val MdcAkkaTimestamp = "akkaTimestamp"
-}
+object Log4jLogger {
 
-final class Log4jLogger extends Actor {
+  private final val MdcThread = "sourceThread"
 
-  import Log4jLogger._
+  private final val MdcAkkaSource = "akkaSource"
 
-  @transient
-  private val logger = LogManager.getLogger(getClass.getName)
+  private final val MdcAkkaTimestamp = "akkaTimestamp"
 
-  override def receive = {
-    case event @ Error(cause, logSource, logClass, message) =>
-      withThreadContext(logSource, event) {
-        val logger = getLogger(logClass, logSource)
-        cause match {
-          case Error.NoCause | null => if (logger.isErrorEnabled) logger.error(if (message != null) message.toString else null)
-          case _                    => if (logger.isErrorEnabled) logger.error(if (message != null) message.toString else cause.getLocalizedMessage, cause)
-        }
-      }
-
-    case event @ Warning(logSource, logClass, message) =>
-      withThreadContext(logSource, event) {
-        val logger = getLogger(logClass, logSource)
-        if (logger.isWarnEnabled) logger.warn("{}", message.asInstanceOf[AnyRef])
-      }
-
-    case event @ Info(logSource, logClass, message) =>
-      withThreadContext(logSource, event) {
-        val logger = getLogger(logClass, logSource)
-        if (logger.isInfoEnabled) logger.info("{}", message.asInstanceOf[AnyRef])
-      }
-
-    case event @ Debug(logSource, logClass, message) =>
-      withThreadContext(logSource, event) {
-        val logger = getLogger(logClass, logSource)
-        if (logger.isDebugEnabled) logger.debug("{}", message.asInstanceOf[AnyRef])
-      }
-
-    case InitializeLogger(_) =>
-      sender() ! LoggerInitialized
-  }
+  @inline
+  private[akkalog4j] def apply(logClass: Class[_], logSource: String) =
+    if (logClass == classOf[DummyClassForStringSources])
+      LogManager.getLogger(logSource)
+    else
+      LogManager.getLogger(logClass)
 
   @inline
   private def withThreadContext(logSource: String, logEvent: LogEvent)(logStatement: => Unit) {
@@ -80,12 +50,37 @@ final class Log4jLogger extends Actor {
   }
 
   @inline
-  private def getLogger(logClass: Class[_], logSource: String) =
-    if (logClass == classOf[DummyClassForStringSources])
-      LogManager.getLogger(logSource)
-    else
-      LogManager.getLogger(logClass)
-
-  @inline
   private def formatTimestamp(timestamp: Long) = Helpers.currentTimeMillisToUTCString(timestamp)
+}
+
+final class Log4jLogger extends Actor {
+  import Log4jLogger._
+
+  override def receive = {
+    case event @ Error(cause, logSource, logClass, message) =>
+      withThreadContext(logSource, event) {
+        cause match {
+          case Error.NoCause | null => Log4jLogger(logClass, logSource).error(if (message != null) message.toString else null)
+          case _                    => Log4jLogger(logClass, logSource).error(if (message != null) message.toString else cause.getLocalizedMessage, cause)
+        }
+      }
+
+    case event @ Warning(logSource, logClass, message) =>
+      withThreadContext(logSource, event) {
+        Log4jLogger(logClass, logSource).warn("{}", message.asInstanceOf[AnyRef])
+      }
+
+    case event @ Info(logSource, logClass, message) =>
+      withThreadContext(logSource, event) {
+        Log4jLogger(logClass, logSource).info("{}", message.asInstanceOf[AnyRef])
+      }
+
+    case event @ Debug(logSource, logClass, message) =>
+      withThreadContext(logSource, event) {
+        Log4jLogger(logClass, logSource).debug("{}", message.asInstanceOf[AnyRef])
+      }
+
+    case InitializeLogger(_) =>
+      sender() ! LoggerInitialized
+  }
 }
