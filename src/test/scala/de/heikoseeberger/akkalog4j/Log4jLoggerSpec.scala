@@ -20,7 +20,7 @@ import akka.actor.{ Actor, DiagnosticActorLogging, Props }
 import akka.event.Logging
 import akka.testkit.AkkaSpec
 import java.nio.file.{ Files, Path, Paths, StandardOpenOption }
-import org.scalatest.BeforeAndAfterEach
+import org.scalatest.{ ConfigMap, BeforeAndAfterAll, BeforeAndAfterEach }
 import scala.collection.JavaConversions._
 import scala.concurrent.duration.DurationInt
 
@@ -54,14 +54,12 @@ object Log4jLoggerSpec {
 
   class TestLogSource
 
-  val out: Path =
-    Paths.get(System.getProperty("java.io.tmpdir"), "log4j-logger-spec.log")
+  val out: Path = Paths.get(System.getProperty("java.io.tmpdir"), "log4j-logger-spec.log")
 
   def outputString: String = Files.readAllLines(out).mkString(sys.props("line.separator"))
 }
 
-class Log4jLoggerSpec extends AkkaSpec(Log4jLoggerSpec.Config) with BeforeAndAfterEach {
-
+class Log4jLoggerSpec extends AkkaSpec(Log4jLoggerSpec.Config) with BeforeAndAfterEach with BeforeAndAfterAll {
   import Log4jLoggerSpec._
 
   val producer = system.actorOf(Props(new LogProducer), "logProducer")
@@ -73,7 +71,7 @@ class Log4jLoggerSpec extends AkkaSpec(Log4jLoggerSpec.Config) with BeforeAndAft
     "log error with stackTrace" in {
       producer ! new RuntimeException("Simulated error")
 
-      awaitCond(outputString.contains("----"), 5 seconds)
+      awaitCond(outputString.contains("----"), 5.seconds)
       val s = outputString
       s should include("akkaSource=[akka://Log4jLoggerSpec/user/logProducer]")
       s should include("level=[ERROR]")
@@ -87,7 +85,7 @@ class Log4jLoggerSpec extends AkkaSpec(Log4jLoggerSpec.Config) with BeforeAndAft
     "log info with parameters" in {
       producer ! (("test x={} y={}", 3, 17))
 
-      awaitCond(outputString.contains("----"), 5 seconds)
+      awaitCond(outputString.contains("----"), 5.seconds)
       val s = outputString
       s should include("akkaSource=[akka://Log4jLoggerSpec/user/logProducer]")
       s should include("level=[INFO]")
@@ -99,7 +97,7 @@ class Log4jLoggerSpec extends AkkaSpec(Log4jLoggerSpec.Config) with BeforeAndAft
     "put custom MDC values when specified" in {
       producer ! ("Message with custom MDC values", Map("ticketNumber" -> 3671, "ticketDesc" -> "Custom MDC Values"))
 
-      awaitCond(outputString.contains("----"), 5 seconds)
+      awaitCond(outputString.contains("----"), 5.seconds)
       val s = outputString
       s should include("akkaSource=[akka://Log4jLoggerSpec/user/logProducer]")
       s should include("level=[INFO]")
@@ -112,7 +110,7 @@ class Log4jLoggerSpec extends AkkaSpec(Log4jLoggerSpec.Config) with BeforeAndAft
     "Support null values in custom MDC" in {
       producer ! ("Message with null custom MDC values", Map("ticketNumber" -> 3671, "ticketDesc" -> null))
 
-      awaitCond(outputString.contains("----"), 5 seconds)
+      awaitCond(outputString.contains("----"), 5.seconds)
       val s = outputString
       s should include("akkaSource=[akka://Log4jLoggerSpec/user/logProducer]")
       s should include("level=[INFO]")
@@ -125,7 +123,7 @@ class Log4jLoggerSpec extends AkkaSpec(Log4jLoggerSpec.Config) with BeforeAndAft
     "include system info in akkaSource when creating Logging with system" in {
       val log = Logging(system, "de.heikoseeberger.akkalog4j.Log4jLoggerSpec.TestLogSource")
       log.info("test")
-      awaitCond(outputString.contains("----"), 5 seconds)
+      awaitCond(outputString.contains("----"), 5.seconds)
       val s = outputString
       s should include("akkaSource=[de.heikoseeberger.akkalog4j.Log4jLoggerSpec.TestLogSource(akka://Log4jLoggerSpec)]")
       s should include("logger=[de.heikoseeberger.akkalog4j.Log4jLoggerSpec.TestLogSource(akka://Log4jLoggerSpec)]")
@@ -134,7 +132,7 @@ class Log4jLoggerSpec extends AkkaSpec(Log4jLoggerSpec.Config) with BeforeAndAft
     "not include system info in akkaSource when creating Logging with system.eventStream" in {
       val log = Logging(system.eventStream, "de.heikoseeberger.akkalog4j.Log4jLoggerSpec.TestLogSource")
       log.info("test")
-      awaitCond(outputString.contains("----"), 5 seconds)
+      awaitCond(outputString.contains("----"), 5.seconds)
       val s = outputString
       s should include("akkaSource=[de.heikoseeberger.akkalog4j.Log4jLoggerSpec.TestLogSource]")
       s should include("logger=[de.heikoseeberger.akkalog4j.Log4jLoggerSpec.TestLogSource]")
@@ -143,7 +141,7 @@ class Log4jLoggerSpec extends AkkaSpec(Log4jLoggerSpec.Config) with BeforeAndAft
     "use short class name and include system info in akkaSource when creating Logging with system and class" in {
       val log = Logging(system, classOf[TestLogSource])
       log.info("test")
-      awaitCond(outputString.contains("----"), 5 seconds)
+      awaitCond(outputString.contains("----"), 5.seconds)
       val s = outputString
       s should include("akkaSource=[Log4jLoggerSpec$TestLogSource(akka://Log4jLoggerSpec)]")
       s should include("logger=[de.heikoseeberger.akkalog4j.Log4jLoggerSpec$TestLogSource]")
@@ -152,16 +150,25 @@ class Log4jLoggerSpec extends AkkaSpec(Log4jLoggerSpec.Config) with BeforeAndAft
     "use short class name in akkaSource when creating Logging with system.eventStream and class" in {
       val log = Logging(system.eventStream, classOf[TestLogSource])
       log.info("test")
-      awaitCond(outputString.contains("----"), 5 seconds)
+      awaitCond(outputString.contains("----"), 5.seconds)
       val s = outputString
       s should include("akkaSource=[Log4jLoggerSpec$TestLogSource]")
       s should include("logger=[de.heikoseeberger.akkalog4j.Log4jLoggerSpec$TestLogSource]")
     }
   }
 
+  override protected def atStartup(): Unit = {
+    super.atStartup()
+    Files.deleteIfExists(out)
+    Files.createFile(out)
+  }
+
   override protected def beforeEach() = {
     super.beforeEach()
-    // Delete the content of the logfile
-    Files.write(out, List.empty[String], StandardOpenOption.WRITE, StandardOpenOption.TRUNCATE_EXISTING)
+    Files.write(
+      out,
+      List.empty[String],
+      StandardOpenOption.TRUNCATE_EXISTING
+    )
   }
 }
