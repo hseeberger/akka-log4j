@@ -3,8 +3,8 @@ import sbt._
 object Version {
   val akka       = "2.4-M1"
   val log4j      = "2.3"
-  val scala      = "2.11.6"
-  val scalaCheck = "1.12.2"
+  val scala      = "2.11.7"
+  val scalaCheck = "1.12.4"
   val scalaTest  = "2.2.5"
 }
 
