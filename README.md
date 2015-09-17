@@ -15,7 +15,7 @@ Grab it while it's hot:
 resolvers += "hseeberger at bintray" at "http://dl.bintray.com/hseeberger/maven"
 
 libraryDependencies ++= List(
-  "de.heikoseeberger" %% "akka-log4j" % "1.0.0-RC1",
+  "de.heikoseeberger" %% "akka-log4j" % "1.0.0-RC2",
   ...
 )
 ```
@@ -27,7 +27,7 @@ Configure `akka.loggers` with `de.heikoseeberger.akkalog4j.Log4jLogger`:
 ```
 akka {
   loggers        = ["de.heikoseeberger.akkalog4j.Log4jLogger"]
-  logging-filter = "de.heikoseeberger.akkalog4j.Log4jLoggingFilter" // Only for Akka 2.4!
+  logging-filter = "de.heikoseeberger.akkalog4j.Log4jLoggingFilter"
   ...
 }
 ```
