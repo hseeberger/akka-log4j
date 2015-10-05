@@ -5,7 +5,7 @@ It is an alternative to the official akka-slf4j backend which uses SLF4J.
 
 ## Installation
 
-akka-log4j depends on Akka 2.4 and Log4j 2.3.
+akka-log4j depends on Akka 2.4 – and hence on Java 8 – and Log4j 2.3.
 
 Grab it while it's hot:
 
