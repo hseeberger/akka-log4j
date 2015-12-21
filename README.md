@@ -12,7 +12,7 @@ Grab it while it's hot:
 ``` scala
 // All releases including intermediate ones are published here,
 // final ones are also published to Maven Central.
-resolvers += "hseeberger at bintray" at "http://dl.bintray.com/hseeberger/maven"
+resolvers += Resolver.bintrayRepo("hseeberger", "maven")
 
 libraryDependencies ++= List(
   "de.heikoseeberger" %% "akka-log4j" % "1.0.3",
