@@ -5,7 +5,7 @@ It is an alternative to the official akka-slf4j backend which uses SLF4J.
 
 ## Installation
 
-akka-log4j depends on Akka 2.4.2-RC1 – and hence on Java 8 – and Log4j 2.5.
+akka-log4j depends on Akka 2.4.2-RC3 – and hence on Java 8 – and Log4j 2.5.
 
 Grab it while it's hot:
 
@@ -15,7 +15,7 @@ Grab it while it's hot:
 resolvers += Resolver.bintrayRepo("hseeberger", "maven")
 
 libraryDependencies ++= List(
-  "de.heikoseeberger" %% "akka-log4j" % "1.1.0",
+  "de.heikoseeberger" %% "akka-log4j" % "1.1.1",
   ...
 )
 ```
