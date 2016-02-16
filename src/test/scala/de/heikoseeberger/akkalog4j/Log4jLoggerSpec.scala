@@ -167,7 +167,7 @@ class Log4jLoggerSpec extends AkkaSpec(Log4jLoggerSpec.Config) with BeforeAndAft
     super.beforeEach()
     Files.write(
       out,
-      List.empty[String],
+      Vector.empty[String],
       StandardOpenOption.TRUNCATE_EXISTING
     )
   }
