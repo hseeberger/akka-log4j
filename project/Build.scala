@@ -33,16 +33,16 @@ object Build extends AutoPlugin {
                   </developer>
                 </developers>,
     scalaVersion := Version.scala,
-    crossScalaVersions := List(scalaVersion.value),
-    scalacOptions ++= List(
+    crossScalaVersions := Vector(scalaVersion.value),
+    scalacOptions ++= Vector(
       "-unchecked",
       "-deprecation",
       "-language:_",
       "-target:jvm-1.8",
       "-encoding", "UTF-8"
     ),
-    unmanagedSourceDirectories.in(Compile) := List(scalaSource.in(Compile).value),
-    unmanagedSourceDirectories.in(Test) := List(scalaSource.in(Test).value),
+    unmanagedSourceDirectories.in(Compile) := Vector(scalaSource.in(Compile).value),
+    unmanagedSourceDirectories.in(Test) := Vector(scalaSource.in(Test).value),
 
     // Scalariform settings
     SbtScalariform.autoImport.scalariformPreferences := SbtScalariform.autoImport.scalariformPreferences.value
