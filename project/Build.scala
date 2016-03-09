@@ -32,7 +32,7 @@ object Build extends AutoPlugin {
                     <url>http://heikoseeberger.de</url>
                   </developer>
                 </developers>,
-    scalaVersion := Version.scala,
+    scalaVersion := Version.Scala,
     crossScalaVersions := Vector(scalaVersion.value),
     scalacOptions ++= Vector(
       "-unchecked",
