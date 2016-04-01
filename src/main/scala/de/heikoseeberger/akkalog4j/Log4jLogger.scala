@@ -17,7 +17,8 @@
 package de.heikoseeberger.akkalog4j
 
 import akka.actor.Actor
-import akka.event.DummyClassForStringSources
+import akka.dispatch.RequiresMessageQueue
+import akka.event.{LoggerMessageQueueSemantics, DummyClassForStringSources}
 import akka.event.Logging._
 import akka.util.Helpers
 import org.apache.logging.log4j.{ LogManager, ThreadContext }
@@ -53,7 +54,7 @@ object Log4jLogger {
   private def formatTimestamp(timestamp: Long) = Helpers.currentTimeMillisToUTCString(timestamp)
 }
 
-final class Log4jLogger extends Actor {
+final class Log4jLogger extends Actor with RequiresMessageQueue[LoggerMessageQueueSemantics] {
   import Log4jLogger._
 
   override def receive = {
