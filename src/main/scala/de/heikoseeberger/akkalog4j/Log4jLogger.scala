@@ -18,7 +18,7 @@ package de.heikoseeberger.akkalog4j
 
 import akka.actor.Actor
 import akka.dispatch.RequiresMessageQueue
-import akka.event.{LoggerMessageQueueSemantics, DummyClassForStringSources}
+import akka.event.{ LoggerMessageQueueSemantics, DummyClassForStringSources }
 import akka.event.Logging._
 import akka.util.Helpers
 import org.apache.logging.log4j.{ LogManager, ThreadContext }
