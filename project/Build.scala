@@ -33,7 +33,7 @@ object Build extends AutoPlugin {
                   </developer>
                 </developers>,
     scalaVersion := Version.Scala,
-    crossScalaVersions := Vector(scalaVersion.value),
+    crossScalaVersions := Vector(scalaVersion.value, "2.11.8"),
     scalacOptions ++= Vector(
       "-unchecked",
       "-deprecation",

@@ -1,10 +1,10 @@
 import sbt._
 
 object Version {
-  final val Akka       = "2.4.11"
+  final val Akka       = "2.4.12"
   final val Log4j      = "2.6.2"
-  final val Scala      = "2.11.8"
-  final val ScalaCheck = "1.13.2"
+  final val Scala      = "2.12.0"
+  final val ScalaCheck = "1.13.4"
   final val ScalaTest  = "3.0.0"
 }
 
