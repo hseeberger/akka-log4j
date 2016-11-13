@@ -1,5 +1,3 @@
-import bintray.BintrayPlugin
-import bintray.BintrayPlugin.autoImport._
 import com.typesafe.sbt.GitPlugin
 import com.typesafe.sbt.GitPlugin.autoImport._
 import com.typesafe.sbt.SbtScalariform
@@ -8,8 +6,8 @@ import de.heikoseeberger.sbtheader.HeaderPlugin
 import de.heikoseeberger.sbtheader.HeaderPlugin.autoImport._
 import de.heikoseeberger.sbtheader.license._
 import sbt._
-import sbt.plugins.JvmPlugin
 import sbt.Keys._
+import sbt.plugins.JvmPlugin
 import scalariform.formatter.preferences.{
   AlignSingleLineCaseStatements,
   DoubleIndentClassDeclaration
@@ -17,8 +15,8 @@ import scalariform.formatter.preferences.{
 
 object Build extends AutoPlugin {
 
-  override def requires = JvmPlugin && HeaderPlugin && GitPlugin
-    JvmPlugin && HeaderPlugin && GitPlugin && SbtScalariform && BintrayPlugin
+  override def requires =
+    JvmPlugin && HeaderPlugin && GitPlugin && SbtScalariform
 
   override def trigger = allRequirements
 
