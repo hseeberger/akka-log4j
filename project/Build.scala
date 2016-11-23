@@ -1,22 +1,18 @@
 import com.typesafe.sbt.GitPlugin
 import com.typesafe.sbt.GitPlugin.autoImport._
-import com.typesafe.sbt.SbtScalariform
-import com.typesafe.sbt.SbtScalariform.autoImport._
 import de.heikoseeberger.sbtheader.HeaderPlugin
 import de.heikoseeberger.sbtheader.HeaderPlugin.autoImport._
 import de.heikoseeberger.sbtheader.license._
+import org.scalafmt.sbt.ScalaFmtPlugin
+import org.scalafmt.sbt.ScalaFmtPlugin.autoImport._
 import sbt._
 import sbt.Keys._
 import sbt.plugins.JvmPlugin
-import scalariform.formatter.preferences.{
-  AlignSingleLineCaseStatements,
-  DoubleIndentClassDeclaration
-}
 
 object Build extends AutoPlugin {
 
   override def requires =
-    JvmPlugin && HeaderPlugin && GitPlugin && SbtScalariform
+    JvmPlugin && HeaderPlugin && GitPlugin && ScalaFmtPlugin
 
   override def trigger = allRequirements
 
@@ -51,11 +47,10 @@ object Build extends AutoPlugin {
                             url("https://github.com/hseeberger")),
     pomIncludeRepository := (_ => false),
 
-    // Scalariform settings
-    scalariformPreferences := scalariformPreferences.value
-      .setPreference(AlignSingleLineCaseStatements, true)
-      .setPreference(AlignSingleLineCaseStatements.MaxArrowIndent, 100)
-      .setPreference(DoubleIndentClassDeclaration, true),
+    // scalafmt settings
+    formatSbtFiles := false,
+    scalafmtConfig := Some(baseDirectory.in(ThisBuild).value / ".scalafmt.conf"),
+    ivyScala := ivyScala.value.map(_.copy(overrideScalaVersion = sbtPlugin.value)), // TODO Remove once this workaround no longer needed (https://github.com/sbt/sbt/issues/2786)!
 
     // Git settings
     git.useGitDescribe := true,

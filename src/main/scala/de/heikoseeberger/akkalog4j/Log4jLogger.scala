@@ -39,46 +39,58 @@ object Log4jLogger {
       LogManager.getLogger(logClass)
 
   @inline
-  private def withThreadContext(logSource: String, logEvent: LogEvent)(logStatement: => Unit) {
+  private def withThreadContext(logSource: String, logEvent: LogEvent)(
+      logStatement: => Unit) {
     ThreadContext.put(MdcAkkaSource, logSource)
     ThreadContext.put(MdcThread, logEvent.thread.getName)
     ThreadContext.put(MdcAkkaTimestamp, formatTimestamp(logEvent.timestamp))
     for ((k, v) <- logEvent.mdc) ThreadContext.put(k, String.valueOf(v))
-    try
-      logStatement
-    finally
-      ThreadContext.clearMap()
+    try logStatement
+    finally ThreadContext.clearMap()
   }
 
   @inline
-  private def formatTimestamp(timestamp: Long) = Helpers.currentTimeMillisToUTCString(timestamp)
+  private def formatTimestamp(timestamp: Long) =
+    Helpers.currentTimeMillisToUTCString(timestamp)
 }
 
-final class Log4jLogger extends Actor with RequiresMessageQueue[LoggerMessageQueueSemantics] {
+final class Log4jLogger
+    extends Actor
+    with RequiresMessageQueue[LoggerMessageQueueSemantics] {
   import Log4jLogger._
 
   override def receive = {
     case event @ Error(cause, logSource, logClass, message) =>
       withThreadContext(logSource, event) {
         cause match {
-          case Error.NoCause | null => Log4jLogger(logClass, logSource).error(if (message != null) message.toString else null)
-          case _                    => Log4jLogger(logClass, logSource).error(if (message != null) message.toString else cause.getLocalizedMessage, cause)
+          case Error.NoCause | null =>
+            Log4jLogger(logClass, logSource).error(
+              if (message != null) message.toString else null)
+          case _ =>
+            Log4jLogger(logClass, logSource).error(if (message != null)
+                                                     message.toString
+                                                   else
+                                                     cause.getLocalizedMessage,
+                                                   cause)
         }
       }
 
     case event @ Warning(logSource, logClass, message) =>
       withThreadContext(logSource, event) {
-        Log4jLogger(logClass, logSource).warn("{}", message.asInstanceOf[AnyRef])
+        Log4jLogger(logClass, logSource)
+          .warn("{}", message.asInstanceOf[AnyRef])
       }
 
     case event @ Info(logSource, logClass, message) =>
       withThreadContext(logSource, event) {
-        Log4jLogger(logClass, logSource).info("{}", message.asInstanceOf[AnyRef])
+        Log4jLogger(logClass, logSource)
+          .info("{}", message.asInstanceOf[AnyRef])
       }
 
     case event @ Debug(logSource, logClass, message) =>
       withThreadContext(logSource, event) {
-        Log4jLogger(logClass, logSource).debug("{}", message.asInstanceOf[AnyRef])
+        Log4jLogger(logClass, logSource)
+          .debug("{}", message.asInstanceOf[AnyRef])
       }
 
     case InitializeLogger(_) =>
