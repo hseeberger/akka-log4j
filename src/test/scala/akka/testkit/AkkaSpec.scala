@@ -15,13 +15,13 @@
  */
 
 /**
- * Copyright (C) 2009-2014 Typesafe Inc. <http://www.typesafe.com>
- */
+  * Copyright (C) 2009-2014 Typesafe Inc. <http://www.typesafe.com>
+  */
 package akka.testkit
 
 import language.{ postfixOps, reflectiveCalls }
 
-import org.scalatest.{ WordSpecLike, BeforeAndAfterAll }
+import org.scalatest.{ BeforeAndAfterAll, WordSpecLike }
 import org.scalatest.Matchers
 import akka.actor.ActorSystem
 import akka.event.{ Logging, LoggingAdapter }
@@ -32,7 +32,8 @@ import akka.dispatch.Dispatchers
 import akka.testkit.TestEvent._
 
 object AkkaSpec {
-  val testConf: Config = ConfigFactory.parseString("""
+  val testConf: Config =
+    ConfigFactory.parseString("""
       akka {
         loggers = ["akka.testkit.TestEventListener"]
         loglevel = "WARNING"
@@ -68,18 +69,25 @@ object AkkaSpec {
 }
 
 abstract class AkkaSpec(_system: ActorSystem)
-    extends TestKit(_system) with WordSpecLike with Matchers with BeforeAndAfterAll with WatchedByCoroner {
+    extends TestKit(_system)
+    with WordSpecLike
+    with Matchers
+    with BeforeAndAfterAll
+    with WatchedByCoroner {
 
-  def this(config: Config) = this(ActorSystem(
-    AkkaSpec.getCallerName(getClass),
-    ConfigFactory.load(config.withFallback(AkkaSpec.testConf))
-  ))
+  def this(config: Config) =
+    this(
+      ActorSystem(
+        AkkaSpec.getCallerName(getClass),
+        ConfigFactory.load(config.withFallback(AkkaSpec.testConf))
+      ))
 
   def this(s: String) = this(ConfigFactory.parseString(s))
 
   def this(configMap: Map[String, _]) = this(AkkaSpec.mapToConfig(configMap))
 
-  def this() = this(ActorSystem(AkkaSpec.getCallerName(getClass), AkkaSpec.testConf))
+  def this() =
+    this(ActorSystem(AkkaSpec.getCallerName(getClass), AkkaSpec.testConf))
 
   val log: LoggingAdapter = Logging(system, this.getClass)
 
@@ -103,15 +111,18 @@ abstract class AkkaSpec(_system: ActorSystem)
 
   protected def afterTermination() {}
 
-  def spawn(dispatcherId: String = Dispatchers.DefaultDispatcherId)(body: ⇒ Unit): Unit =
+  def spawn(dispatcherId: String = Dispatchers.DefaultDispatcherId)(
+      body: ⇒ Unit): Unit =
     Future(body)(system.dispatchers.lookup(dispatcherId))
 
   override def expectedTestDuration: FiniteDuration = 60 seconds
 
-  def muteDeadLetters(messageClasses: Class[_]*)(sys: ActorSystem = system): Unit =
+  def muteDeadLetters(messageClasses: Class[_]*)(
+      sys: ActorSystem = system): Unit =
     if (!sys.log.isDebugEnabled) {
       def mute(clazz: Class[_]): Unit =
-        sys.eventStream.publish(Mute(DeadLettersFilter(clazz)(occurrences = Int.MaxValue)))
+        sys.eventStream.publish(
+          Mute(DeadLettersFilter(clazz)(occurrences = Int.MaxValue)))
       if (messageClasses.isEmpty) mute(classOf[AnyRef])
       else messageClasses foreach mute
     }
