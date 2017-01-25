@@ -78,7 +78,7 @@ class Log4jLoggerSpec
     "log error with stackTrace" in {
       producer ! new RuntimeException("Simulated error")
 
-      awaitCond(outputString.contains("----"), 5.seconds)
+      awaitCond(outputString.contains("----"), 10.seconds)
       val s = outputString
       s should include("akkaSource=[akka://Log4jLoggerSpec/user/logProducer]")
       s should include("level=[ERROR]")
