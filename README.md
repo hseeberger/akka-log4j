@@ -15,8 +15,8 @@ Grab it while it's hot:
 // final ones are also published to Maven Central.
 resolvers += Resolver.bintrayRepo("hseeberger", "maven")
 
-libraryDependencies ++= List(
-  "de.heikoseeberger" %% "akka-log4j" % "1.2.2",
+libraryDependencies ++= Seq(
+  "de.heikoseeberger" %% "akka-log4j" % "1.3.0",
   ...
 )
 ```
