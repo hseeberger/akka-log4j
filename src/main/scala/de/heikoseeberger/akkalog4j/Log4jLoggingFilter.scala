@@ -19,28 +19,18 @@ package de.heikoseeberger.akkalog4j
 import akka.actor.ActorSystem
 import akka.event.{ EventStream, Logging, LoggingFilter }
 
-class Log4jLoggingFilter(settings: ActorSystem.Settings,
-                         eventStream: EventStream)
+class Log4jLoggingFilter(settings: ActorSystem.Settings, eventStream: EventStream)
     extends LoggingFilter {
 
   override def isErrorEnabled(logClass: Class[_], logSource: String): Boolean =
-    eventStream.logLevel >= Logging.ErrorLevel && Log4jLogger(
-      logClass,
-      logSource).isErrorEnabled
+    eventStream.logLevel >= Logging.ErrorLevel && Log4jLogger(logClass, logSource).isErrorEnabled
 
-  override def isWarningEnabled(logClass: Class[_],
-                                logSource: String): Boolean =
-    eventStream.logLevel >= Logging.WarningLevel && Log4jLogger(
-      logClass,
-      logSource).isWarnEnabled
+  override def isWarningEnabled(logClass: Class[_], logSource: String): Boolean =
+    eventStream.logLevel >= Logging.WarningLevel && Log4jLogger(logClass, logSource).isWarnEnabled
 
   override def isInfoEnabled(logClass: Class[_], logSource: String): Boolean =
-    eventStream.logLevel >= Logging.InfoLevel && Log4jLogger(
-      logClass,
-      logSource).isInfoEnabled
+    eventStream.logLevel >= Logging.InfoLevel && Log4jLogger(logClass, logSource).isInfoEnabled
 
   override def isDebugEnabled(logClass: Class[_], logSource: String): Boolean =
-    eventStream.logLevel >= Logging.DebugLevel && Log4jLogger(
-      logClass,
-      logSource).isDebugEnabled
+    eventStream.logLevel >= Logging.DebugLevel && Log4jLogger(logClass, logSource).isDebugEnabled
 }

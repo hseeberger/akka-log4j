@@ -55,8 +55,7 @@ object Coroner {
     def cancel(): Unit
   }
 
-  private class WatchHandleImpl(startAndStopDuration: FiniteDuration)
-      extends WatchHandle {
+  private class WatchHandleImpl(startAndStopDuration: FiniteDuration) extends WatchHandle {
     val cancelPromise = Promise[Boolean]
     val startedLatch  = new CountDownLatch(1)
     val finishedLatch = new CountDownLatch(1)
@@ -77,8 +76,7 @@ object Coroner {
         .await(startAndStopDuration.length, startAndStopDuration.unit)
     }
 
-    override def ready(atMost: Duration)(
-        implicit permit: CanAwait): this.type = {
+    override def ready(atMost: Duration)(implicit permit: CanAwait): this.type = {
       result(atMost)
       this
     }
@@ -112,15 +110,15 @@ object Coroner {
       val startThreads = threadMx.getThreadCount
       if (displayThreadCounts) {
         threadMx.resetPeakThreadCount()
-        out.println(
-          s"Coroner Thread Count starts at $startThreads in $reportTitle")
+        out.println(s"Coroner Thread Count starts at $startThreads in $reportTitle")
       }
       watchedHandle.started()
       try {
         if (!Await.result(watchedHandle, duration)) {
           watchedHandle.expired()
           out.println(
-            s"Coroner not cancelled after ${duration.toMillis}ms. Looking for signs of foul play...")
+            s"Coroner not cancelled after ${duration.toMillis}ms. Looking for signs of foul play..."
+          )
           try printReport(reportTitle, out)
           catch {
             case NonFatal(ex) ⇒ {
@@ -133,14 +131,14 @@ object Coroner {
         if (displayThreadCounts) {
           val endThreads = threadMx.getThreadCount
           out.println(
-            s"Coroner Thread Count started at $startThreads, ended at $endThreads, peaked at ${threadMx.getPeakThreadCount} in $reportTitle")
+            s"Coroner Thread Count started at $startThreads, ended at $endThreads, peaked at ${threadMx.getPeakThreadCount} in $reportTitle"
+          )
         }
         out.flush()
         watchedHandle.finished()
       }
     }
-    new Thread(new Runnable { def run = triggerReportIfOverdue(duration) },
-               "Coroner").start()
+    new Thread(new Runnable { def run = triggerReportIfOverdue(duration) }, "Coroner").start()
     watchedHandle.waitForStart()
     watchedHandle
   }
@@ -174,11 +172,9 @@ object Coroner {
 
     def findDeadlockedThreads: (Seq[ThreadInfo], String) = {
       val (ids, desc) = if (threadMx.isSynchronizerUsageSupported()) {
-        (threadMx.findDeadlockedThreads(),
-         "monitors and ownable synchronizers")
+        (threadMx.findDeadlockedThreads(), "monitors and ownable synchronizers")
       } else {
-        (threadMx.findMonitorDeadlockedThreads(),
-         "monitors, but NOT ownable synchronizers")
+        (threadMx.findMonitorDeadlockedThreads(), "monitors, but NOT ownable synchronizers")
       }
       if (ids == null) {
         (Seq.empty, desc)
