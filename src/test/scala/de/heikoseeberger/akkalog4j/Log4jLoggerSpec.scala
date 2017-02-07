@@ -82,8 +82,7 @@ class Log4jLoggerSpec
       val s = outputString
       s should include("akkaSource=[akka://Log4jLoggerSpec/user/logProducer]")
       s should include("level=[ERROR]")
-      s should include(
-        "logger=[de.heikoseeberger.akkalog4j.Log4jLoggerSpec$LogProducer]")
+      s should include("logger=[de.heikoseeberger.akkalog4j.Log4jLoggerSpec$LogProducer]")
       s should include regex sourceThreadRegex
       s should include("msg=[Simulated error]")
       s should include("java.lang.RuntimeException: Simulated error")
@@ -97,39 +96,34 @@ class Log4jLoggerSpec
       val s = outputString
       s should include("akkaSource=[akka://Log4jLoggerSpec/user/logProducer]")
       s should include("level=[INFO]")
-      s should include(
-        "logger=[de.heikoseeberger.akkalog4j.Log4jLoggerSpec$LogProducer]")
+      s should include("logger=[de.heikoseeberger.akkalog4j.Log4jLoggerSpec$LogProducer]")
       s should include regex sourceThreadRegex
       s should include("msg=[test x=3 y=17]")
     }
 
     "put custom MDC values when specified" in {
-      producer ! ("Message with custom MDC values", Map(
-        "ticketNumber" -> 3671,
-        "ticketDesc"   -> "Custom MDC Values"))
+      producer ! ("Message with custom MDC values", Map("ticketNumber" -> 3671,
+                                                        "ticketDesc"   -> "Custom MDC Values"))
 
       awaitCond(outputString.contains("----"), 5.seconds)
       val s = outputString
       s should include("akkaSource=[akka://Log4jLoggerSpec/user/logProducer]")
       s should include("level=[INFO]")
-      s should include(
-        "logger=[de.heikoseeberger.akkalog4j.Log4jLoggerSpec$LogProducer]")
+      s should include("logger=[de.heikoseeberger.akkalog4j.Log4jLoggerSpec$LogProducer]")
       s should include regex sourceThreadRegex
       s should include("mdc=[ticket-#3671: Custom MDC Values]")
       s should include("msg=[Message with custom MDC values]")
     }
 
     "Support null values in custom MDC" in {
-      producer ! ("Message with null custom MDC values", Map(
-        "ticketNumber" -> 3671,
-        "ticketDesc"   -> null))
+      producer ! ("Message with null custom MDC values", Map("ticketNumber" -> 3671,
+                                                             "ticketDesc"   -> null))
 
       awaitCond(outputString.contains("----"), 5.seconds)
       val s = outputString
       s should include("akkaSource=[akka://Log4jLoggerSpec/user/logProducer]")
       s should include("level=[INFO]")
-      s should include(
-        "logger=[de.heikoseeberger.akkalog4j.Log4jLoggerSpec$LogProducer]")
+      s should include("logger=[de.heikoseeberger.akkalog4j.Log4jLoggerSpec$LogProducer]")
       s should include regex sourceThreadRegex
       s should include("mdc=[ticket-#3671: null]")
       s should include("msg=[Message with null custom MDC values]")
@@ -137,28 +131,26 @@ class Log4jLoggerSpec
 
     "include system info in akkaSource when creating Logging with system" in {
       val log =
-        Logging(system,
-                "de.heikoseeberger.akkalog4j.Log4jLoggerSpec.TestLogSource")
+        Logging(system, "de.heikoseeberger.akkalog4j.Log4jLoggerSpec.TestLogSource")
       log.info("test")
       awaitCond(outputString.contains("----"), 5.seconds)
       val s = outputString
       s should include(
-        "akkaSource=[de.heikoseeberger.akkalog4j.Log4jLoggerSpec.TestLogSource(akka://Log4jLoggerSpec)]")
+        "akkaSource=[de.heikoseeberger.akkalog4j.Log4jLoggerSpec.TestLogSource(akka://Log4jLoggerSpec)]"
+      )
       s should include(
-        "logger=[de.heikoseeberger.akkalog4j.Log4jLoggerSpec.TestLogSource(akka://Log4jLoggerSpec)]")
+        "logger=[de.heikoseeberger.akkalog4j.Log4jLoggerSpec.TestLogSource(akka://Log4jLoggerSpec)]"
+      )
     }
 
     "not include system info in akkaSource when creating Logging with system.eventStream" in {
       val log =
-        Logging(system.eventStream,
-                "de.heikoseeberger.akkalog4j.Log4jLoggerSpec.TestLogSource")
+        Logging(system.eventStream, "de.heikoseeberger.akkalog4j.Log4jLoggerSpec.TestLogSource")
       log.info("test")
       awaitCond(outputString.contains("----"), 5.seconds)
       val s = outputString
-      s should include(
-        "akkaSource=[de.heikoseeberger.akkalog4j.Log4jLoggerSpec.TestLogSource]")
-      s should include(
-        "logger=[de.heikoseeberger.akkalog4j.Log4jLoggerSpec.TestLogSource]")
+      s should include("akkaSource=[de.heikoseeberger.akkalog4j.Log4jLoggerSpec.TestLogSource]")
+      s should include("logger=[de.heikoseeberger.akkalog4j.Log4jLoggerSpec.TestLogSource]")
     }
 
     "use short class name and include system info in akkaSource when creating Logging with system and class" in {
@@ -166,10 +158,8 @@ class Log4jLoggerSpec
       log.info("test")
       awaitCond(outputString.contains("----"), 5.seconds)
       val s = outputString
-      s should include(
-        "akkaSource=[Log4jLoggerSpec$TestLogSource(akka://Log4jLoggerSpec)]")
-      s should include(
-        "logger=[de.heikoseeberger.akkalog4j.Log4jLoggerSpec$TestLogSource]")
+      s should include("akkaSource=[Log4jLoggerSpec$TestLogSource(akka://Log4jLoggerSpec)]")
+      s should include("logger=[de.heikoseeberger.akkalog4j.Log4jLoggerSpec$TestLogSource]")
     }
 
     "use short class name in akkaSource when creating Logging with system.eventStream and class" in {
@@ -178,8 +168,7 @@ class Log4jLoggerSpec
       awaitCond(outputString.contains("----"), 5.seconds)
       val s = outputString
       s should include("akkaSource=[Log4jLoggerSpec$TestLogSource]")
-      s should include(
-        "logger=[de.heikoseeberger.akkalog4j.Log4jLoggerSpec$TestLogSource]")
+      s should include("logger=[de.heikoseeberger.akkalog4j.Log4jLoggerSpec$TestLogSource]")
     }
   }
 

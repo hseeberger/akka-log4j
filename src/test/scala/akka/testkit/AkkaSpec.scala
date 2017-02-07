@@ -80,7 +80,8 @@ abstract class AkkaSpec(_system: ActorSystem)
       ActorSystem(
         AkkaSpec.getCallerName(getClass),
         ConfigFactory.load(config.withFallback(AkkaSpec.testConf))
-      ))
+      )
+    )
 
   def this(s: String) = this(ConfigFactory.parseString(s))
 
@@ -111,18 +112,15 @@ abstract class AkkaSpec(_system: ActorSystem)
 
   protected def afterTermination() {}
 
-  def spawn(dispatcherId: String = Dispatchers.DefaultDispatcherId)(
-      body: ⇒ Unit): Unit =
+  def spawn(dispatcherId: String = Dispatchers.DefaultDispatcherId)(body: ⇒ Unit): Unit =
     Future(body)(system.dispatchers.lookup(dispatcherId))
 
   override def expectedTestDuration: FiniteDuration = 60 seconds
 
-  def muteDeadLetters(messageClasses: Class[_]*)(
-      sys: ActorSystem = system): Unit =
+  def muteDeadLetters(messageClasses: Class[_]*)(sys: ActorSystem = system): Unit =
     if (!sys.log.isDebugEnabled) {
       def mute(clazz: Class[_]): Unit =
-        sys.eventStream.publish(
-          Mute(DeadLettersFilter(clazz)(occurrences = Int.MaxValue)))
+        sys.eventStream.publish(Mute(DeadLettersFilter(clazz)(occurrences = Int.MaxValue)))
       if (messageClasses.isEmpty) mute(classOf[AnyRef])
       else messageClasses foreach mute
     }

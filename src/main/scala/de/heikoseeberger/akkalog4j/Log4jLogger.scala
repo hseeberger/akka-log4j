@@ -37,8 +37,7 @@ object Log4jLogger {
       LogManager.getLogger(logClass)
 
   @inline
-  private def withThreadContext(source: String, event: LogEvent)(
-      statement: => Unit) {
+  private def withThreadContext(source: String, event: LogEvent)(statement: => Unit) {
     ThreadContext.put(MdcAkkaSource, source)
     ThreadContext.put(MdcThread, event.thread.getName)
     ThreadContext.put(MdcAkkaTimestamp, formatTimestamp(event.timestamp))
@@ -52,9 +51,7 @@ object Log4jLogger {
     Helpers.currentTimeMillisToUTCString(timestamp)
 }
 
-final class Log4jLogger
-    extends Actor
-    with RequiresMessageQueue[LoggerMessageQueueSemantics] {
+final class Log4jLogger extends Actor with RequiresMessageQueue[LoggerMessageQueueSemantics] {
   import Log4jLogger._
 
   override def receive = {
