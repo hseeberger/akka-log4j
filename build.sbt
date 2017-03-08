@@ -25,7 +25,7 @@ lazy val `akka-log4j` =
 lazy val library =
   new {
     object Version {
-      val akka       = "2.4.16"
+      val akka       = "2.4.17"
       val log4j      = "2.8"
       val scala      = "2.12.1"
       val scalaCheck = "1.13.4"
