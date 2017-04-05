@@ -26,9 +26,9 @@ lazy val library =
   new {
     object Version {
       val akka       = "2.4.17"
-      val log4j      = "2.8"
+      val log4j      = "2.8.1"
       val scala      = "2.12.1"
-      val scalaCheck = "1.13.4"
+      val scalaCheck = "1.13.5"
       val scalaTest  = "3.0.1"
     }
     val akkaActor   = "com.typesafe.akka"        %% "akka-actor"   % Version.akka
@@ -69,10 +69,8 @@ lazy val commonSettings =
       "-source", "1.8",
       "-target", "1.8"
     ),
-    unmanagedSourceDirectories.in(Compile) :=
-      Seq(scalaSource.in(Compile).value),
-    unmanagedSourceDirectories.in(Test) :=
-      Seq(scalaSource.in(Test).value)
+    unmanagedSourceDirectories.in(Compile) := Seq(scalaSource.in(Compile).value),
+    unmanagedSourceDirectories.in(Test) := Seq(scalaSource.in(Test).value)
 )
 
 lazy val gitSettings =
