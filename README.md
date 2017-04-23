@@ -16,19 +16,19 @@ Grab it while it's hot:
 resolvers += Resolver.bintrayRepo("hseeberger", "maven")
 
 libraryDependencies ++= Seq(
-  "de.heikoseeberger" %% "akka-log4j" % "1.3.0",
+  "de.heikoseeberger" %% "akka-log4j" % "1.4.0",
   ...
 )
 ```
 
 ## Usage
 
-Configure `akka.loggers` with `de.heikoseeberger.akkalog4j.Log4jLogger`:
+Configure `akka.loggers` and `akka.logging-filter`:
 
 ```
 akka {
-  loggers        = ["de.heikoseeberger.akkalog4j.Log4jLogger"]
-  logging-filter = "de.heikoseeberger.akkalog4j.Log4jLoggingFilter"
+  loggers        = [de.heikoseeberger.akkalog4j.Log4jLogger]
+  logging-filter = de.heikoseeberger.akkalog4j.Log4jLoggingFilter
   ...
 }
 ```
