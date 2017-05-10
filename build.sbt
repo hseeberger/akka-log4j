@@ -25,7 +25,7 @@ lazy val `akka-log4j` =
 lazy val library =
   new {
     object Version {
-      val akka       = "2.5.0"
+      val akka       = "2.5.1"
       val log4j      = "2.8.2"
       val scalaCheck = "1.13.5"
       val scalaTest  = "3.0.3"
@@ -45,18 +45,16 @@ lazy val library =
 lazy val settings =
   commonSettings ++
   gitSettings ++
-  headerSettings ++
-  sonatypeSettings
+  publishSettings
 
 lazy val commonSettings =
   Seq(
     // scalaVersion from .travis.yml
     // crossScalaVersions from .travis.yml
     organization := "de.heikoseeberger",
-    licenses += ("Apache 2.0",
-                 url("http://www.apache.org/licenses/LICENSE-2.0")),
-    mappings.in(Compile, packageBin) +=
-      baseDirectory.in(ThisBuild).value / "LICENSE" -> "LICENSE",
+    organizationName := "Heiko Seeberger",
+    startYear := Some(2015),
+    licenses += ("Apache-2.0", url("http://www.apache.org/licenses/LICENSE-2.0")),
     scalacOptions ++= Seq(
       "-unchecked",
       "-deprecation",
@@ -73,13 +71,7 @@ lazy val gitSettings =
     git.useGitDescribe := true
   )
 
-import de.heikoseeberger.sbtheader.license.Apache2_0
-lazy val headerSettings =
-  Seq(
-    headers := Map("scala" -> Apache2_0("2015", "Heiko Seeberger"))
-  )
-
-lazy val sonatypeSettings =
+lazy val publishSettings =
   Seq(
     homepage := Some(url("https://github.com/hseeberger/akka-log4j")),
     scmInfo := Some(ScmInfo(url("https://github.com/hseeberger/akka-log4j"),
