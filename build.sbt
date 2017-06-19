@@ -75,7 +75,7 @@ lazy val gitSettings =
 lazy val scalafmtSettings =
   Seq(
     scalafmtOnCompile := true,
-    scalafmtVersion := "1.0.0-RC3"
+    scalafmtVersion := "1.0.0-RC4"
   )
 
 lazy val publishSettings =
