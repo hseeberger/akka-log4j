@@ -26,9 +26,9 @@ lazy val library =
   new {
     object Version {
       val akka       = "2.5.4"
-      val log4j      = "2.8.2"
+      val log4j      = "2.9.0"
       val scalaCheck = "1.13.5"
-      val scalaTest  = "3.0.3"
+      val scalaTest  = "3.0.4"
     }
     val akkaActor   = "com.typesafe.akka"        %% "akka-actor"   % Version.akka
     val akkaTestkit = "com.typesafe.akka"        %% "akka-testkit" % Version.akka
