@@ -16,7 +16,7 @@ Grab it while it's hot:
 resolvers += Resolver.bintrayRepo("hseeberger", "maven")
 
 libraryDependencies ++= Seq(
-  "de.heikoseeberger" %% "akka-log4j" % "1.4.0",
+  "de.heikoseeberger" %% "akka-log4j" % "1.5.0",
   ...
 )
 ```
