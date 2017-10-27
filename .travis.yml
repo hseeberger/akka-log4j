@@ -6,9 +6,3 @@ scala:
 
 jdk:
   - oraclejdk8
-  - oraclejdk9
-
-matrix:
-  exclude:
-  - scala: 2.11.11
-    jdk: oraclejdk9
