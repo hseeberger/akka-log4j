@@ -25,28 +25,28 @@ lazy val `akka-log4j` =
 lazy val library =
   new {
     object Version {
-      val akka       = "2.5.7"
+      val akka       = "2.5.8"
       val log4j      = "2.10.0"
       val scalaCheck = "1.13.5"
       val scalaTest  = "3.0.4"
     }
     val akkaActor   = "com.typesafe.akka"        %% "akka-actor"   % Version.akka
     val akkaTestkit = "com.typesafe.akka"        %% "akka-testkit" % Version.akka
-    val log4jApi    = "org.apache.logging.log4j" %  "log4j-api"    % Version.log4j
-    val log4jCore   = "org.apache.logging.log4j" %  "log4j-core"   % Version.log4j
+    val log4jApi    = "org.apache.logging.log4j" % "log4j-api"     % Version.log4j
+    val log4jCore   = "org.apache.logging.log4j" % "log4j-core"    % Version.log4j
     val scalaCheck  = "org.scalacheck"           %% "scalacheck"   % Version.scalaCheck
     val scalaTest   = "org.scalatest"            %% "scalatest"    % Version.scalaTest
-}
+  }
 
 // *****************************************************************************
 // Settings
 // *****************************************************************************        |
 
 lazy val settings =
-  commonSettings ++
-  gitSettings ++
-  scalafmtSettings ++
-  publishSettings
+commonSettings ++
+gitSettings ++
+scalafmtSettings ++
+publishSettings
 
 lazy val commonSettings =
   Seq(
@@ -61,11 +61,12 @@ lazy val commonSettings =
       "-deprecation",
       "-language:_",
       "-target:jvm-1.8",
-      "-encoding", "UTF-8"
+      "-encoding",
+      "UTF-8"
     ),
     unmanagedSourceDirectories.in(Compile) := Seq(scalaSource.in(Compile).value),
     unmanagedSourceDirectories.in(Test) := Seq(scalaSource.in(Test).value)
-)
+  )
 
 lazy val gitSettings =
   Seq(
@@ -74,16 +75,16 @@ lazy val gitSettings =
 
 lazy val scalafmtSettings =
   Seq(
-    scalafmtOnCompile := true,
-    scalafmtOnCompile.in(Sbt) := false,
-    scalafmtVersion := "1.3.0"
+    scalafmtOnCompile := true
   )
 
 lazy val publishSettings =
   Seq(
     homepage := Some(url("https://github.com/hseeberger/akka-log4j")),
-    scmInfo := Some(ScmInfo(url("https://github.com/hseeberger/akka-log4j"),
-                            "git@github.com:hseeberger/akka-log4j.git")),
+    scmInfo := Some(
+      ScmInfo(url("https://github.com/hseeberger/akka-log4j"),
+              "git@github.com:hseeberger/akka-log4j.git")
+    ),
     developers += Developer("hseeberger",
                             "Heiko Seeberger",
                             "mail@heikoseeberger.de",
