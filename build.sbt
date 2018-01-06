@@ -43,10 +43,10 @@ lazy val library =
 // *****************************************************************************        |
 
 lazy val settings =
-commonSettings ++
-gitSettings ++
-scalafmtSettings ++
-publishSettings
+  commonSettings ++
+  gitSettings ++
+  scalafmtSettings ++
+  publishSettings
 
 lazy val commonSettings =
   Seq(
@@ -64,8 +64,8 @@ lazy val commonSettings =
       "-encoding",
       "UTF-8"
     ),
-    unmanagedSourceDirectories.in(Compile) := Seq(scalaSource.in(Compile).value),
-    unmanagedSourceDirectories.in(Test) := Seq(scalaSource.in(Test).value)
+    Compile / unmanagedSourceDirectories := Seq((Compile / scalaSource).value),
+    Test / unmanagedSourceDirectories := Seq((Test / scalaSource).value),
   )
 
 lazy val gitSettings =
