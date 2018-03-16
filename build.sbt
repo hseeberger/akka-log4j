@@ -5,7 +5,7 @@
 lazy val `akka-log4j` =
   project
     .in(file("."))
-    .enablePlugins(AutomateHeaderPlugin, GitVersioning)
+    .enablePlugins(AutomateHeaderPlugin)
     .settings(settings)
     .settings(
       libraryDependencies ++= Seq(
@@ -25,10 +25,10 @@ lazy val `akka-log4j` =
 lazy val library =
   new {
     object Version {
-      val akka       = "2.5.8"
-      val log4j      = "2.10.0"
+      val akka       = "2.5.11"
+      val log4j      = "2.11.0"
       val scalaCheck = "1.13.5"
-      val scalaTest  = "3.0.4"
+      val scalaTest  = "3.0.5"
     }
     val akkaActor   = "com.typesafe.akka"        %% "akka-actor"   % Version.akka
     val akkaTestkit = "com.typesafe.akka"        %% "akka-testkit" % Version.akka
@@ -44,7 +44,6 @@ lazy val library =
 
 lazy val settings =
   commonSettings ++
-  gitSettings ++
   scalafmtSettings ++
   publishSettings
 
@@ -66,11 +65,6 @@ lazy val commonSettings =
     ),
     Compile / unmanagedSourceDirectories := Seq((Compile / scalaSource).value),
     Test / unmanagedSourceDirectories := Seq((Test / scalaSource).value),
-  )
-
-lazy val gitSettings =
-  Seq(
-    git.useGitDescribe := true
   )
 
 lazy val scalafmtSettings =
