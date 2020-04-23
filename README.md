@@ -1,37 +1,6 @@
 # akka-log4j #
 
-[![Build Status](https://travis-ci.org/hseeberger/akka-log4j.svg?branch=master)](https://travis-ci.org/hseeberger/akka-log4j)
-[![Maven Central](https://img.shields.io/maven-central/v/de.heikoseeberger/akka-log4j_2.12.svg)](https://maven-badges.herokuapp.com/maven-central/de.heikoseeberger/akka-log4j_2.12)
-
-akka-log4j is a logging backend implementation for [Akka](http://akka.io) based on [Log4j 2](http://logging.apache.org/log4j/2.x).
-It is an alternative to the official akka-slf4j backend which uses SLF4J.
-
-## Installation
-
-Grab it while it's hot:
-
-``` scala
-// All releases including intermediate ones are published here,
-// final ones are also published to Maven Central.
-resolvers += Resolver.bintrayRepo("hseeberger", "maven")
-
-libraryDependencies ++= Seq(
-  "de.heikoseeberger" %% "akka-log4j" % "1.6.1",
-  ...
-)
-```
-
-## Usage
-
-Configure `akka.loggers` and `akka.logging-filter`:
-
-```
-akka {
-  loggers        = [de.heikoseeberger.akkalog4j.Log4jLogger]
-  logging-filter = de.heikoseeberger.akkalog4j.Log4jLoggingFilter
-  ...
-}
-```
+This project is at its END OF LIFE. Please use akka-slf4j. You can still use Log4j 2 as a logging backend by simply adding "log4j-slf4j-impl" as a dependency.
 
 ## Contribution policy ##
 
